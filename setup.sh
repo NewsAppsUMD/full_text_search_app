@@ -1,0 +1,1 @@
+pip install requests bs4 python-dateutil sqlite-utils pdfplumber Flask peewee
