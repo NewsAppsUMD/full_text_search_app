@@ -1,14 +1,32 @@
 from io import BytesIO
-import sqlite3
 import requests
 from bs4 import BeautifulSoup
 from dateutil.parser import *
 import pdfplumber
-from sqlite_utils import Database
+from playhouse.sqlite_ext import *
+db = SqliteExtDatabase('ethics.db')
 
-db = Database("ethics.db")
+class Minute(Model):
+    date = DateField()
+    file = CharField()
+    url = CharField()
+    text = TextField()
+
+    class Meta:
+        table_name = "minutes"
+        database = db
+
+class MinuteIndex(FTSModel):
+    rowid = RowIDField()
+    text = SearchField()
+
+    class Meta:
+        database = db
+        options = {'tokenize': 'porter', 'content': Minute.text}
+
+db.create_tables([Minute, MinuteIndex])
+
 base_url = "https://ethics.maryland.gov/meeting-minutes/?wpfb_list_page="
-pdf_list = []
 
 for page in range(1,9):
     url = base_url + str(page)
@@ -26,7 +44,7 @@ for page in range(1,9):
             for page in pdf.pages:
                 page_text = page.extract_text()
         all_pages_text += "\n" + page_text if page_text else ""
-        pdf_list.append({"date": date, "file": name, "url": pdf_url, "text": all_pages_text})
+        Minute.create(date=date, file=name, url=pdf_url, text=all_pages_text)
 
-db["minutes"].insert_all(pdf_list, pk="url")
-db["minutes"].enable_fts(["text"])
+MinuteIndex.rebuild()
+MinuteIndex.optimize()
