@@ -1,0 +1,13 @@
+{
+    "name": "My Codespace",
+    "dockerFile": "Dockerfile",
+    "extensions": [
+      "ms-python.python"
+    ],
+    "settings": {
+      "sqlite.extensions": [
+        "fts5"
+      ]
+    }
+  }
+  

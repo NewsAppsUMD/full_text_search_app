@@ -43,7 +43,7 @@ for page in range(1,9):
             all_pages_text = ""
             for page in pdf.pages:
                 page_text = page.extract_text()
-        all_pages_text += "\n" + page_text if page_text else ""
+                all_pages_text += "\n" + page_text if page_text else ""
         Minute.create(date=date, file=name, url=pdf_url, text=all_pages_text)
 
 MinuteIndex.rebuild()
