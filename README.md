@@ -7,3 +7,9 @@ To get started, do the following in Terminal:
 
 1. Run this command: `wget https://raw.githubusercontent.com/NewsAppsUMD/full_text_search_app/dev/setup.sh`
 2. Run `bash setup.sh`
+3. Run `mkdir .devcontainer`
+4. Run `cd .devcontainer`
+5. Run `wget https://raw.githubusercontent.com/NewsAppsUMD/full_text_search_app/dev/.devcontainer/Dockerfile`
+6. Run `wget https://raw.githubusercontent.com/NewsAppsUMD/full_text_search_app/dev/.devcontainer/devcontainer.json`
+7. Run `cd ..`
+8. Rebuild the container when prompted.
