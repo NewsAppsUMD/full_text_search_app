@@ -12,11 +12,12 @@ RUN apt-get update && apt-get install -y wget gcc make
 RUN pip install peewee Flask
 
 # Download the SQLite source code from the official website, and extract it using tar
-RUN wget https://www.sqlite.org/2023/sqlite-autoconf-3410200.tar.gz && \
+RUN cd /tmp && \
+    wget https://www.sqlite.org/2023/sqlite-autoconf-3410200.tar.gz && \
     tar -zxvf sqlite-autoconf-3410200.tar.gz
 
 # Set the working directory to the extracted SQLite source code folder
-WORKDIR sqlite-autoconf-3410200
+WORKDIR tmp/sqlite-autoconf-3410200
 
 # Build and install SQLite with FTS5 (full-text search) enabled
 # ./configure --enable-fts5: Configure the build with FTS5 enabled
@@ -25,3 +26,6 @@ WORKDIR sqlite-autoconf-3410200
 RUN ./configure --enable-fts5 && \
     sudo make && \
     sudo make install
+
+# Clean up the files
+RUN rm -rf /tmp/sqlite-autoconf-3410200 /tmp/sqlite-autoconf-3410200.tar.gz
